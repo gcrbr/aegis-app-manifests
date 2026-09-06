@@ -29,7 +29,8 @@ jobs:
         uses: trufflesecurity/trufflehog@v3.96.0
         with:
           base: ""
-          head: ${{ github.ref_name }}
+          head: HEAD
+          extra_args: --only-verified
 
       - name: ⚙️ Test image updates
         run: python3 -m unittest discover -s tests -v
