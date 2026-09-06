@@ -1,15 +1,37 @@
-# aegis-app-manifests
+# 🛡️ Aegis Pipeline
 
-Deployment configuration for the mock application used by the
-[Aegis DevSecOps Pipeline](https://github.com/gcrbr/aegis-pipeline).
+<div align="center">
+  <img src="assets/logo.png" alt="Aegis Logo" width="100"/>
+  <br>
+  <img src="assets/brands.png" alt="Brands" width="300"/>
+</div>
+
+This project is the result of a project work carried out in collaboration with [Fides Group](https://www.fidesgroup.com/it) and students from the **Cisco DTLab**.
+
+This repository serves as deployment configuration for the mock application used by the **Aegis DevSecOps Pipeline**.
 
 | Repository | Responsibility |
 | --- | --- |
 | [aegis-app-manifests](https://github.com/gcrbr/aegis-app-manifests) | Kubernetes manifests, PostgreSQL deployment, RBAC, Cilium/OPA policies and Compose orchestration |
 | [aegis-backend](https://github.com/gcrbr/aegis-backend) | Flask API, Dockerfile, dependencies and backend image CI |
 | [aegis-frontend](https://github.com/gcrbr/aegis-frontend) | HTML/JavaScript UI, Nginx configuration, Dockerfile and frontend image CI |
+## 🔀 Flow
+<div align="center">
+  <img src="assets/pipeline.png" alt="The pipeline" width="700">
+</div>
 
-## Kubernetes and GitOps
+## 🛠️ Technology Stack
+- **CI Pipeline**: GitHub Actions
+- **Containerization**: Docker
+- **Security Scanning**: Trivy, TruffleHog
+- **Orchestration**: Kubernetes
+- **GitOps CD**: Argo CD
+- **Networking & CNI**: Cilium, Hubble
+- **Policy Engine**: OPA Gatekeeper
+
+## 💻 Implementation
+
+### Kubernetes and GitOps
 
 All Kubernetes resources stay in `k8s/`, including frontend, backend and database
 deployments/services, namespace, service accounts, RBAC, configuration, database
@@ -20,13 +42,30 @@ path `k8s` keeps the same source configuration. No resource names, image referen
 sync waves, ports or policies are changed by the migration. Cilium and Gatekeeper
 must already be installed for their custom resources.
 
+The database secret contains the existing mock application's example credentials.
+
 For manual application:
 
 ```bash
 kubectl apply -f k8s/
 ```
 
-The database secret contains the existing mock application's example credentials.
+Port-forward the ArgoCD GUI:
+```bash
+kubectl port-forward svc/argocd-server -n argocd 8080:443
+```
+
+Get the default password for the "*admin*" user:
+```bash
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
+```
+Browse to your `https://localhost:8080`, login with the default credentials and create your application in ArgoCD
+
+Port-forward the Hubble GUI:
+```bash
+kubectl port-forward -n kube-system svc/hubble-ui 12000:80
+````
+And open your browser to `http://localhost:12000` to access the Hubble interface.
 
 ## Local development across three repositories
 
