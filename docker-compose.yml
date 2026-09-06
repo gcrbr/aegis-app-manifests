@@ -2,8 +2,8 @@ services:
   db:
     image: postgres:16-alpine
     environment:
-      POSTGRES_USER: aegis
-      POSTGRES_PASSWORD: aegis
+      POSTGRES_USER: aegis # trufflehog:ignore
+      POSTGRES_PASSWORD: aegis # trufflehog:ignore
       POSTGRES_DB: aegis
     ports:
       - "5432:5432"

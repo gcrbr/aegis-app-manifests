@@ -1,4 +1,4 @@
-name: Aegis Manifest Validation
+name: 🛡️ Aegis Manifest Validation
 
 on:
   push:
@@ -18,25 +18,25 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout manifests
+      - name: ✅ Checkout manifests
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Secret scanning
+      - name: 🔎 Secret scanning
         uses: trufflesecurity/trufflehog@v3.96.0
         with:
           base: ""
           head: HEAD
 
-      - name: Test image updates
+      - name: ⚙️ Test image updates
         run: python3 -m unittest discover -s tests -v
 
-      - name: Validate Compose configuration
+      - name: ✔️ Validate Compose configuration
         run: docker compose config --quiet
 
-      - name: Kubernetes configuration scan
+      - name: 👀 Kubernetes configuration scan
         uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: config
